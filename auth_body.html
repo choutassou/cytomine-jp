@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="login-pf" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex, nofollow">
+
+            <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Sign in to cytomine</title>
+    <link rel="icon" href="/iam/resources/7sk0e/login/keycloak/img/favicon.ico" />
+            <link href="/iam/resources/7sk0e/common/keycloak/node_modules/@patternfly/patternfly/patternfly.min.css" rel="stylesheet" />
+            <link href="/iam/resources/7sk0e/common/keycloak/node_modules/patternfly/dist/css/patternfly.min.css" rel="stylesheet" />
+            <link href="/iam/resources/7sk0e/common/keycloak/node_modules/patternfly/dist/css/patternfly-additions.min.css" rel="stylesheet" />
+            <link href="/iam/resources/7sk0e/common/keycloak/lib/pficon/pficon.css" rel="stylesheet" />
+            <link href="/iam/resources/7sk0e/login/keycloak/css/login.css" rel="stylesheet" />
+    <script src="/iam/resources/7sk0e/login/keycloak/js/menu-button-links.js" type="module"></script>
+        <script type="module">
+            import { checkCookiesAndSetTimer } from "/iam/resources/7sk0e/login/keycloak/js/authChecker.js";
+
+            checkCookiesAndSetTimer(
+              "55cec278-6f0c-445e-ab54-00eb0402ffee",
+              "hQNpoXTmnQ8",
+              "/iam/realms/cytomine/login-actions/restart?client_id=core&tab_id=hQNpoXTmnQ8&skip_logout=true"
+            );
+        </script>
+</head>
+
+<body class="">
+<div class="login-pf-page">
+    <div id="kc-header" class="login-pf-page-header">
+        <div id="kc-header-wrapper"
+             class="">cytomine</div>
+    </div>
+    <div class="card-pf">
+        <header class="login-pf-header">
+                <div class="pf-c-dropdown" id="kc-locale">
+                    <div id="kc-locale-wrapper" class="">
+                        <div id="kc-locale-dropdown" class="menu-button-links ">
+                            <button tabindex="1" id="kc-current-locale-link" aria-label="languages" aria-haspopup="true" aria-expanded="false" aria-controls="language-switch1">English</button>
+                            <ul role="menu" tabindex="-1" aria-labelledby="kc-current-locale-link" aria-activedescendant="" id="language-switch1" class="pf-c-dropdown__menu pf-m-align-right">
+                                    <li class="" role="none">
+                                        <a role="menuitem" id="language-1" class="pf-c-dropdown__menu-item" href="/iam/realms/cytomine/login-actions/authenticate?client_id=core&amp;tab_id=hQNpoXTmnQ8&amp;execution=f3838e88-1954-4e67-a0d0-af0b7f45ae57&amp;kc_locale=no">Norsk</a>
+                                    </li>
+                                    <li class="" role="none">
+                                        <a role="menuitem" id="language-2" class="pf-c-dropdown__menu-item" href="/iam/realms/cytomine/login-actions/authenticate?client_id=core&amp;tab_id=hQNpoXTmnQ8&amp;execution=f3838e88-1954-4e67-a0d0-af0b7f45ae57&amp;kc_locale=en">English</a>
+                                    </li>
+                                    <li class="" role="none">
+                                        <a role="menuitem" id="language-3" class="pf-c-dropdown__menu-item" href="/iam/realms/cytomine/login-actions/authenticate?client_id=core&amp;tab_id=hQNpoXTmnQ8&amp;execution=f3838e88-1954-4e67-a0d0-af0b7f45ae57&amp;kc_locale=fr">Français</a>
+                                    </li>
+                                    <li class="" role="none">
+                                        <a role="menuitem" id="language-4" class="pf-c-dropdown__menu-item" href="/iam/realms/cytomine/login-actions/authenticate?client_id=core&amp;tab_id=hQNpoXTmnQ8&amp;execution=f3838e88-1954-4e67-a0d0-af0b7f45ae57&amp;kc_locale=es">Español</a>
+                                    </li>
+                                    <li class="" role="none">
+                                        <a role="menuitem" id="language-5" class="pf-c-dropdown__menu-item" href="/iam/realms/cytomine/login-actions/authenticate?client_id=core&amp;tab_id=hQNpoXTmnQ8&amp;execution=f3838e88-1954-4e67-a0d0-af0b7f45ae57&amp;kc_locale=nl">Nederlands</a>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <h1 id="kc-page-title">        Sign in to your account
+
+</h1>
+      </header>
+      <div id="kc-content">
+        <div id="kc-content-wrapper">
+
+
+        <div id="kc-form">
+          <div id="kc-form-wrapper">
+                <form id="kc-form-login" onsubmit="login.disabled = true; return true;" action="http://13.115.175.235/iam/realms/cytomine/login-actions/authenticate?session_code=xjr7JaUd3Ph1IY0MjH7yF9spWUzG-5uldRpIJW41Yv4&amp;execution=f3838e88-1954-4e67-a0d0-af0b7f45ae57&amp;client_id=core&amp;tab_id=hQNpoXTmnQ8" method="post">
+                        <div class="form-group">
+                            <label for="username" class="pf-c-form__label pf-c-form__label-text">Username or email</label>
+
+                            <input tabindex="2" id="username" class="pf-c-form-control" name="username" value=""  type="text" autofocus autocomplete="username"
+                                   aria-invalid=""
+                            />
+
+
+                        </div>
+
+                    <div class="form-group">
+                        <label for="password" class="pf-c-form__label pf-c-form__label-text">Password</label>
+
+                        <div class="pf-c-input-group">
+                            <input tabindex="3" id="password" class="pf-c-form-control" name="password" type="password" autocomplete="current-password"
+                                   aria-invalid=""
+                            />
+                            <button class="pf-c-button pf-m-control" type="button" aria-label="Show password"
+                                    aria-controls="password" data-password-toggle tabindex="4"
+                                    data-icon-show="fa fa-eye" data-icon-hide="fa fa-eye-slash"
+                                    data-label-show="Show password" data-label-hide="Hide password">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group login-pf-settings">
+                        <div id="kc-form-options">
+                                <div class="checkbox">
+                                    <label>
+                                            <input tabindex="5" id="rememberMe" name="rememberMe" type="checkbox"> Remember me
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="">
+                                    <span><a tabindex="6" href="/iam/realms/cytomine/login-actions/reset-credentials?client_id=core&amp;tab_id=hQNpoXTmnQ8">Forgot Password?</a></span>
+                            </div>
+
+                      </div>
+
+                      <div id="kc-form-buttons" class="form-group">
+                          <input type="hidden" id="id-hidden-input" name="credentialId" />
+                          <input tabindex="7" class="pf-c-button pf-m-primary pf-m-block btn-lg" name="login" id="kc-login" type="submit" value="Sign In"/>
+                      </div>
+                </form>
+            </div>
+        </div>
+        <script type="module" src="/iam/resources/7sk0e/login/keycloak/js/passwordVisibility.js"></script>
+
+
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

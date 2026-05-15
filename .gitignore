@@ -29,3 +29,10 @@ data/
 **/bin
 **/.cache/**
 helm/charts/cytomine/charts/*.tgz
+
+# AI Agent for development
+.omc
+temp
+BAK.*
+resume-cc.sh
+.claude

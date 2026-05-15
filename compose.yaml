@@ -71,20 +71,23 @@ services:
     restart: unless-stopped
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - core
       - iam
       - pims
     volumes:
       - /etc/localtime:/etc/localtime
+      - ./web-ui/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
     environment:
       <<: *version-env
-      CORE_URL: http://127.0.0.1:8080/api
-      IAM_URL: http://127.0.0.1:8100/iam/realms/cytomine
-      PIMS_URL: http://127.0.0.1:5001/ims
-      APPENGINE_URL: http://127.0.0.1:8082
-      CBIR_URL: http://127.0.0.1:6000
-      SAM_URL: http://127.0.0.1:8000
+      CORE_URL: https://13.115.175.235/api
+      IAM_URL: https://13.115.175.235/iam/realms/cytomine
+      PIMS_URL: https://13.115.175.235/ims
+      APPENGINE_URL: https://13.115.175.235/app-engine
+      CBIR_URL: https://13.115.175.235/cbir
+      SAM_URL: https://13.115.175.235/sam
     networks:
       host_network:
         ipv4_address: 172.16.238.7
@@ -147,9 +150,9 @@ services:
       KC_DB_URL_HOST: iam-db
       KC_DB_URL_PORT: 5432
       KC_DB_USERNAME: iam
-      KC_HOSTNAME: 127.0.0.1
-      KC_HOSTNAME_ADMIN: 127.0.0.1
-      KC_HOSTNAME_PORT: 8100
+      KC_HOSTNAME: 13.115.175.235
+      KC_HOSTNAME_ADMIN: 13.115.175.235
+      KC_HOSTNAME_PORT: -1
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_STRICT_BACKCHANNEL: false
       KC_HOSTNAME_STRICT_HTTPS: false
@@ -233,8 +236,8 @@ services:
       IMAGE_SERVER_PRIVATE_KEY: d70607f5-c478-403c-be11-3dbc1716d1cf
       IMAGE_SERVER_PUBLIC_KEY: 9a8b8369-2446-44cb-b0af-604a74e1dcdb
       IAM_URL: http://iam:8100
-      IAM_EXTERNAL_URL: http://127.0.0.1:8100
-      SERVER_URL: http://127.0.0.1:8080
+      IAM_EXTERNAL_URL: https://13.115.175.235
+      SERVER_URL: https://13.115.175.235
       PIMS_URL: http://pims:5000
       CBIR_URL: http://cbir:6000
       APPENGINE_API_URL: http://app-engine:8080
