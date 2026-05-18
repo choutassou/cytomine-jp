@@ -187,6 +187,7 @@ export default {
         {value: 'fr', name:'Français'},
         {value: 'es', name:'Español'},
         {value: 'nl', name:'Nederlands'},
+        {value: 'ja', name:'日本語'},
       ],
     };
   },

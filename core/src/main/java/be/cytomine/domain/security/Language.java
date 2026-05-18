@@ -27,7 +27,8 @@ public enum Language {
     ENGLISH("EN"),
     FRENCH("FR"),
     DUTCH("NL"),
-    SPANISH("ES");
+    SPANISH("ES"),
+    JAPANESE("JA");
 
     private final String code;
 

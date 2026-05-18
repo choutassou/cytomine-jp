@@ -120,7 +120,8 @@ export default {
         {value: 'EN', name:'English'},
         {value: 'FR', name:'Français'},
         {value: 'ES', name:'Español'},
-        {value: 'NL', name:'Nederlands'}
+        {value: 'NL', name:'Nederlands'},
+        {value: 'JA', name:'日本語'}
       ]
     };
   },
