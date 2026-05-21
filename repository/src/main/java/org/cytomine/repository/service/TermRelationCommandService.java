@@ -1,7 +1,15 @@
 package org.cytomine.repository.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.transaction.Transactional;
@@ -67,6 +75,11 @@ public class TermRelationCommandService {
             // Check that a relation between those terms don't exist before adding a new one.
             .filter(i -> termRelationRepository.findByTerm1IdAndTerm2Id(createTermRelation.term1Id(),
                 createTermRelation.term2Id()).isEmpty())
+            // Reject relations that would introduce a cycle in the term hierarchy: such an
+            // ontology cannot be rendered as a tree and previously crashed the server with a
+            // StackOverflowError when fetched.
+            .filter(firstTerm -> !wouldCreateCycle(firstTerm.getOntologyId(),
+                createTermRelation.term1Id(), createTermRelation.term2Id()))
             .map(firstTerm -> {
                 long ontologyId = firstTerm.getOntologyId();
                 long relationId = relationRepository.findParent().getId();
@@ -86,6 +99,43 @@ public class TermRelationCommandService {
                 return new HttpCommandResponse(true, termResponse, commandV2Entity.getId(),
                     Commands.CREATE_TERM_RELATION);
             });
+    }
+
+    /**
+     * Check whether adding the PARENT relation parentTermId -> childTermId would create a cycle
+     * in the ontology's term hierarchy. A cycle appears when the two terms are the same, or when
+     * parentTermId is already a (transitive) descendant of childTermId.
+     *
+     * @param ontologyId   Ontology the terms belong to
+     * @param parentTermId Candidate parent term (term1 of the relation)
+     * @param childTermId  Candidate child term (term2 of the relation)
+     *
+     * @return true if creating the relation would introduce a cycle
+     */
+    private boolean wouldCreateCycle(long ontologyId, long parentTermId, long childTermId) {
+        if (parentTermId == childTermId) {
+            return true;
+        }
+        Map<Long, List<Long>> childrenByParent = new HashMap<>();
+        for (TermRelationEntity rel : termRelationRepository.findAllByOntologyId(ontologyId)) {
+            childrenByParent.computeIfAbsent(rel.getTerm1Id(), k -> new ArrayList<>()).add(rel.getTerm2Id());
+        }
+        Set<Long> visited = new HashSet<>();
+        Deque<Long> stack = new ArrayDeque<>();
+        stack.push(childTermId);
+        while (!stack.isEmpty()) {
+            long current = stack.pop();
+            if (!visited.add(current)) {
+                continue;
+            }
+            for (long descendant : childrenByParent.getOrDefault(current, List.of())) {
+                if (descendant == parentTermId) {
+                    return true;
+                }
+                stack.push(descendant);
+            }
+        }
+        return false;
     }
 
     @Transactional

@@ -120,7 +120,7 @@ public class Ontology extends CytomineDomain {
         List<Map<String, Object>> rootTerms = new ArrayList<>();
         for (Term term : this.terms()) {
             if (term.getDeleted() == null && term.isRoot()) {
-                rootTerms.add(branch(term));
+                rootTerms.add(branch(term, new HashSet<>()));
             }
         }
         return rootTerms;
@@ -134,6 +134,21 @@ public class Ontology extends CytomineDomain {
      * @return Branch with all term children as tree
      */
     Map<String, Object> branch(Term term) {
+        return branch(term, new HashSet<>());
+    }
+
+    /**
+     * Get the term branch, guarding against cyclic term hierarchies.
+     *
+     * @param term      Root term
+     * @param ancestors Ids of the terms on the current path from the root; a child whose id
+     *                  is already on the path is not descended into, so a corrupted ontology
+     *                  with a parent/child cycle is rendered as a finite tree instead of
+     *                  recursing forever (which previously threw StackOverflowError).
+     *
+     * @return Branch with all term children as tree
+     */
+    private Map<String, Object> branch(Term term, Set<Long> ancestors) {
         Map<String, Object> t = new HashMap<>();
         t.put("name", term.getName());
         t.put("id", term.getId());
@@ -148,10 +163,14 @@ public class Ontology extends CytomineDomain {
         t.put("key", term.getId());
         List<Map<String, Object>> children = new ArrayList<>();
         boolean isFolder = false;
-        for (Term child : term.children()) {
-            isFolder = true;
-            Map<String, Object> childTree = branch(child);
-            children.add(childTree);
+        // ancestors.add returns false when this term is already on the path -> cycle, stop descending.
+        if (ancestors.add(term.getId())) {
+            for (Term child : term.children()) {
+                isFolder = true;
+                Map<String, Object> childTree = branch(child, ancestors);
+                children.add(childTree);
+            }
+            ancestors.remove(term.getId());
         }
         children = children.stream()
             .sorted(Comparator.comparing(a -> ((String) a.get("name"))))

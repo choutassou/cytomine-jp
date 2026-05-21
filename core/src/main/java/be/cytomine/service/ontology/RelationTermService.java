@@ -16,10 +16,14 @@ package be.cytomine.service.ontology;
  * limitations under the License.
  */
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +41,7 @@ import be.cytomine.domain.ontology.Term;
 import be.cytomine.domain.security.User;
 import be.cytomine.exceptions.AlreadyExistException;
 import be.cytomine.exceptions.ObjectNotFoundException;
+import be.cytomine.exceptions.WrongArgumentException;
 import be.cytomine.repository.ontology.RelationTermRepository;
 import be.cytomine.service.CurrentUserService;
 import be.cytomine.service.ModelService;
@@ -115,8 +120,47 @@ public class RelationTermService extends ModelService {
     public CommandResponse add(JsonObject jsonObject) {
         securityACLService.check(jsonObject.getJSONAttrLong("term1"), Term.class, WRITE);
         securityACLService.check(jsonObject.getJSONAttrLong("term2"), Term.class, WRITE);
+        RelationTerm relationTerm = (RelationTerm) createFromJSON(jsonObject);
+        if (RelationTerm.PARENT.equals(relationTerm.getRelation().getName())
+            && createsCycle(relationTerm.getTerm1(), relationTerm.getTerm2())) {
+            throw new WrongArgumentException("Cannot set term " + relationTerm.getTerm1().getId()
+                + " as parent of term " + relationTerm.getTerm2().getId()
+                + ": it would create a cycle in the ontology");
+        }
         User currentUser = currentUserService.getCurrentUser();
         return executeCommand(new AddCommand(currentUser), null, jsonObject);
+    }
+
+    /**
+     * Check whether adding the PARENT relation parent -> child would create a cycle in the
+     * term hierarchy. A cycle appears when parent is the same term as child, or when parent
+     * is already a (transitive) descendant of child.
+     *
+     * @param parent Candidate parent term (term1 of the relation)
+     * @param child  Candidate child term (term2 of the relation)
+     *
+     * @return true if creating the relation would introduce a cycle
+     */
+    private boolean createsCycle(Term parent, Term child) {
+        if (Objects.equals(parent.getId(), child.getId())) {
+            return true;
+        }
+        Set<Long> visited = new HashSet<>();
+        Deque<Term> stack = new ArrayDeque<>();
+        stack.push(child);
+        while (!stack.isEmpty()) {
+            Term current = stack.pop();
+            if (!visited.add(current.getId())) {
+                continue;
+            }
+            for (Term descendant : current.children()) {
+                if (Objects.equals(descendant.getId(), parent.getId())) {
+                    return true;
+                }
+                stack.push(descendant);
+            }
+        }
+        return false;
     }
 
     /**
